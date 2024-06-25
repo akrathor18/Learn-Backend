@@ -1,0 +1,16 @@
+{
+  "name": "02express",
+  "version": "1.0.0",
+  "description": "learn beckend devlopment",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "author": "Ashish",
+  "license": "ISC",
+  "dependencies": {
+    "expres": "^0.0.5",
+    "express": "^4.19.2"
+  }
+}
