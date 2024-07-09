@@ -5,10 +5,8 @@ const port = 3000
 
 app.use(express.static(path.join(__dirname,'static')))
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+app.use('/', require(path.join(__dirname,'routes/blog')))
 
 app.listen(port, () => {
-  console.log(`Example app listening on port http:/localhost:${port}`)
+  console.log(`Blog app listening on port http:/localhost:${port}`)
 })
