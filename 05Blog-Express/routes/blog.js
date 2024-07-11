@@ -8,7 +8,8 @@ routes.get('/blogs', (req, res) => {
     blogs.forEach(e=> {
         console.log(e.title);
     });
-    res.sendFile(path.join(__dirname,'../views/index.html'))
+    // res.sendFile(path.join(__dirname,'../views/index.html'))
+    res.render('../views/home')
 })
 routes.get('/', (req, res) => {
     res.send('Hiii')
