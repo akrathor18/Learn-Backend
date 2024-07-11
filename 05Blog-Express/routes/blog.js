@@ -4,10 +4,10 @@ const path= require('path')
 const blogs= require('../data/blogs')
 
 routes.get('/blogs', (req, res) => {
-    // res.send(bolgs)
-    blogs.forEach(e=> {
-        console.log(e.title);
-    });
+    res.send(blogs)
+    // blogs.forEach(e=> {
+    //     console.log(e.title);
+    // });
     res.sendFile(path.join(__dirname,'../templates/index.html'))
 })
 routes.get('/', (req, res) => {
