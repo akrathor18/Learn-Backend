@@ -12,14 +12,15 @@ routes.get('/blogs', (req, res) => {
     res.render('../views/home')
 })
 routes.get('/', (req, res) => {
-    res.send('Hiii')
+    // res.send('Hiii')
+    res.render('../views/home')
     
-    res.sendFile(path.join(__dirname,'../views/index.html'))
 })
 routes.get('/blogpost/:slug', (req, res) => {
     myblog= blogs.filter((e)=>{
       return  e.slug== req.params.slug
     })
+        
     console.log(myblog);
     res.sendFile(path.join(__dirname,'../views/blogpage.html'))
 })
