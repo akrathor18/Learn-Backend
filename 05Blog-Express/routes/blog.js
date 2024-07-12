@@ -4,15 +4,12 @@ const path= require('path')
 const blogs= require('../data/blogs')
 
 routes.get('/blogs', (req, res) => {
-    // res.send(blogs)
     blogs.forEach(e=> {
         console.log(e.title);
     });
-    // res.sendFile(path.join(__dirname,'../views/index.html'))
     res.render('../views/home')
 })
 routes.get('/', (req, res) => {
-    // res.send('Hiii')
     res.render('../views/home')
     
 })
