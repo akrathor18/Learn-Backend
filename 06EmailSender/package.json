@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "nodemailer": "^6.9.14",
+    "nodemon": "^3.1.4"
+  },
+  "name": "06emailsender",
+  "version": "1.0.0",
+  "main": "emailSender.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ashish",
+  "license": "ISC",
+  "description": ""
+}
