@@ -24,14 +24,14 @@ export function SignUp() {
                         <p className="mt-2 text-base text-gray-600">
                             Already have an account?{' '}
                             <Link
-                                to={"/sing-in"}
+                                to={"/"}
                                 title=""
                                 className="font-medium text-black transition-all duration-200 hover:underline"
                             >
                                 Sign In
                             </Link>
                         </p>
-                        <form action="#" method="POST" className="mt-8">
+                        <form onSubmit={handleSubmit(onSubmit)}  className="mt-8">
                             <div className="space-y-5">
                                 <div>
                                     <label htmlFor="name" className="text-base font-medium text-gray-900">
@@ -40,11 +40,21 @@ export function SignUp() {
                                     </label>
                                     <div className="mt-2">
                                         <input
+                                            {...register('fName', {
+                                                required: "This field is Required *",
+                                                minLength: { value: 5, message: "Name lenght atleast 4 charachter longe" },
+                                                maxLength: { value: 30, message: "Name lenght atleast 30 charachter short" },
+                                            })}
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="text"
                                             placeholder="Full Name"
                                             id="name"
-                                        ></input>
+                                        />
+                                        {errors.fName && (
+                                            <span className="text-red-500 text-sm">
+                                                {errors.fName.message}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                                 <div>
@@ -54,11 +64,20 @@ export function SignUp() {
                                     </label>
                                     <div className="mt-2">
                                         <input
+                                        {...register('Email', {
+                                            required: "This field is Required *",
+                                            minLength: { value: 8, message: "Invalid Email" },
+                                        })}
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="email"
                                             placeholder="Email"
                                             id="email"
-                                        ></input>
+                                        />
+                                        {errors.Email && (
+                                            <span className="text-red-500 text-sm">
+                                                {errors.Password.message}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                                 <div>
@@ -70,20 +89,37 @@ export function SignUp() {
                                     </div>
                                     <div className="mt-2">
                                         <input
+                                         {...register('Password', {
+                                            required: "This field is Required *",
+                                            minLength: { value: 8, message: "Password must be 8 characters long" },
+
+                                        })}
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="password"
                                             placeholder="Password"
                                             id="password"
-                                        ></input>
+                                        />
+                                        {errors.Password && (
+                                            <span className="text-red-500 text-sm">
+                                                {errors.Password.message}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                                 <div>
                                     <button
-                                        type="button"
+                                    disabled={isSubmitting}
+                                        type="submit"
                                         className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                                     >
                                         Create Account <ArrowRight className="ml-2" size={16} />
                                     </button>
+                                      
+                                {
+                                    isSubmitSuccessful&&(
+                                        <span className={`text-green-600 font-bold`}>Account created successfully</span>
+                                    )
+                                }
                                 </div>
                             </div>
                         </form>
