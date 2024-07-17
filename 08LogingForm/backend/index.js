@@ -23,24 +23,37 @@ con.connect(function (err) {
 
 app.use(cors())
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
+app.post('/', (req, res) => {
+    const { fName, Email, Password } = req.body;
+
+    const sql = "INSERT INTO details (Name, Email, Password) VALUES (?, ?, ?)";
+    
+    con.query(sql, [fName, Email, Password], (err, result) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            return res.status(500).send('Internal Server Error'); // Ensure to return here
+        }
+
+        console.log("1 record inserted");
+        res.send('Data received and inserted successfully!'); // Send response only once
+    });
+});
+
 
 
 app.post('/', (req, res) => {
-    console.log(req.body)
-    
-    // const sql = "INSERT INTO details (Name, Email, Password) VALUES ('Ashish', 'A@gmail.com', 'ashish@123')";
-    // con.query(sql, function (err, result) {
-        // if (err) {
-        //     console.error('Error executing query:', err);
-        //     res.status(500).send('Error executing query');
-        //     return;
-        // }
-        // console.log("1 record inserted");
-        // res.send('Hello World! 1 record inserted');
-    // });
+    const detail= req.body;
+    const {fName, Email, Password}= detail
+    const sql = `INSERT INTO details (Name, Email, Password) VALUES ('${fName}', '${Email}', '${Password}')`;
+    con.query(sql, function (err, result) {
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).send('Error executing query');
+            return;
+        }
+        console.log("1 record inserted");
+        res.send('Hello World! 1 record inserted');
+    });
 
     res.send('Hello World!')
 
