@@ -3,7 +3,7 @@ const mysql = require('mysql');
 const cors = require('cors')
 const app = express();
 const port = 3000;
-
+var bodyParser = require('body-parser')
 // Create the MySQL connection once
 const con = mysql.createConnection({
     host: 'localhost',
@@ -11,7 +11,7 @@ const con = mysql.createConnection({
     password: 'ashish',
     database: 'userLogin'
 });
-
+app.use(bodyParser.json())
 // Connect to the MySQL database
 con.connect(function (err) {
     if (err) {
@@ -29,6 +29,8 @@ app.get('/', (req, res) => {
 
 
 app.post('/', (req, res) => {
+    console.log(req.body)
+    
     // const sql = "INSERT INTO details (Name, Email, Password) VALUES ('Ashish', 'A@gmail.com', 'ashish@123')";
     // con.query(sql, function (err, result) {
         // if (err) {
@@ -40,6 +42,7 @@ app.post('/', (req, res) => {
         // res.send('Hello World! 1 record inserted');
     // });
 
+    res.send('Hello World!')
 
 });
 

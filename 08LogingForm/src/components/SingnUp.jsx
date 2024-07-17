@@ -5,19 +5,29 @@ import { useForm } from "react-hook-form";
 import { data } from 'autoprefixer';
 
 export function SignUp() {
-const [data, setdata] = useState('')
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting, isSubmitSuccessful, },
     } = useForm();
 
-    const onSubmit = async(data) => {
-       const prom= await fetch (`http://localhost:3000/`)
-       const resp= await prom.text 
-        console.log(data);
-        console.log(resp);
-    }
+    const onSubmit = async (data) => {
+        try {
+            const response = await fetch('http://localhost:3000/', {
+                method: 'POST', // Use POST method
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data), // Send the data as JSON
+            });
+    
+            const resp = await response.text(); // Call .text() as a function
+            console.log(data, resp);
+        } catch (error) {
+            console.error('Error during the fetch:', error);
+        }
+    };
+    
 
     return (
 
