@@ -19,7 +19,7 @@ export function SignIn() {
                 },
                 body: JSON.stringify(data), // Send the data as JSON
             });
-    
+
             const resp = await response.text(); // Call .text() as a function
             console.log(data, resp);
         } catch (error) {

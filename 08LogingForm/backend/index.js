@@ -27,7 +27,7 @@ app.post('/', (req, res) => {
     const { fName, Email, Password } = req.body;
 
     const sql = "INSERT INTO details (Name, Email, Password) VALUES (?, ?, ?)";
-    
+
     con.query(sql, [fName, Email, Password], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -41,6 +41,7 @@ app.post('/', (req, res) => {
 
 
 
+
 app.post('/sign-in', (req, res) => {
     const { Email, Password } = req.body;
     const sql = `SELECT * FROM details WHERE Email = ?`;
@@ -51,18 +52,21 @@ app.post('/sign-in', (req, res) => {
             res.status(500).send('Error executing query');
             return;
         }
-
-        if (result.length === 0) {
-            res.status(404).send({msg:'User not found'});
-            return;
-        }
         const user = result[0];
 
-        if (user.Password){
-            res.status(200).send({msg:"Login successfully"})
-
+        if (result.length === 0) {
+            res.status(404).json({msg:'User not found',code:404});
+            return;
         }
-        console.log(typeof( result));
+
+        if(user.Password!=Password){
+            res.status(404).json({msg:"Password is incorrect", code:404})
+        }
+
+        if (user.Password==Password){
+            res.status(200).json({msg:"Login successfully", code:200})
+        }   
+        console.log(result);
     });
 });
 
