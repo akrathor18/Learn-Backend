@@ -1,18 +1,23 @@
-import React from 'react'
+import {React , useState}from 'react'
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useForm } from "react-hook-form";
+import { data } from 'autoprefixer';
 
 export function SignUp() {
-
+const [data, setdata] = useState('')
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting, isSubmitSuccessful, },
     } = useForm();
 
-    const onSubmit = (data) => console.log(data);
-
+    const onSubmit = async(data) => {
+       const prom= await fetch (`http://localhost:3000/`)
+       const resp= await prom.text 
+        console.log(data);
+        console.log(resp);
+    }
 
     return (
 
