@@ -41,23 +41,31 @@ app.post('/', (req, res) => {
 
 
 
-app.post('/', (req, res) => {
-    const detail= req.body;
-    const {fName, Email, Password}= detail
-    const sql = `INSERT INTO details (Name, Email, Password) VALUES ('${fName}', '${Email}', '${Password}')`;
-    con.query(sql, function (err, result) {
+app.post('/sign-in', (req, res) => {
+    const { Email, Password } = req.body;
+    const sql = `SELECT * FROM details WHERE Email = ?`;
+
+    con.query(sql, [Email], function (err, result) {
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).send('Error executing query');
             return;
         }
-        console.log("1 record inserted");
-        res.send('Hello World! 1 record inserted');
+
+        if (result.length === 0) {
+            res.status(404).send({msg:'User not found'});
+            return;
+        }
+        const user = result[0];
+
+        if (user.Password){
+            res.status(200).send({msg:"Login successfully"})
+
+        }
+        console.log(typeof( result));
     });
-
-    res.send('Hello World!')
-
 });
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);

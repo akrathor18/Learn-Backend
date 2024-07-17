@@ -10,8 +10,22 @@ export function SignIn() {
         formState: { errors, isSubmitting, isSubmitSuccessful, },
     } = useForm();
 
-    const onSubmit = (data) => console.log(data);
-
+    const onSubmit = async (data) => {
+        try {
+            const response = await fetch('http://localhost:3000/sign-in', {
+                method: 'POST', // Use POST method
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data), // Send the data as JSON
+            });
+    
+            const resp = await response.text(); // Call .text() as a function
+            console.log(data, resp);
+        } catch (error) {
+            console.error('Error during the fetch:', error);
+        }
+    };
 
     return (
         <section>
@@ -22,7 +36,7 @@ export function SignIn() {
                         <p className="mt-2 text-sm text-gray-600">
                             Don&apos;t have an account?{' '}
                             <Link
-                                to={'/sing-up'}
+                                to={'/'}
                                 title=""
                                 className="font-semibold text-black transition-all duration-200 hover:underline"
                             >
