@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { data } from 'autoprefixer';
 
 export function SignUp() {
+    const [formResp, setFormResp] = useState()
     const {
         register,
         handleSubmit,
@@ -22,12 +23,13 @@ export function SignUp() {
             });
     
             const resp = await response.json(); // Call .text() as a function
-            console.log(data, resp);
+            setFormResp(resp)
+            // console.log(data);
         } catch (error) {
             console.error('Error during the fetch:', error);
         }
     };
-    
+    console.log(formResp);
 
     return (
 
@@ -132,7 +134,7 @@ export function SignUp() {
                                       
                                 {
                                     isSubmitSuccessful&&(
-                                        <span className={`text-green-600 font-bold`}>Account created successfully</span>
+                                        <span className={`${formResp.status==409?'text-red-500':'text-green-500'} font-bold`}>{formResp.msg}</span>
                                     )
                                 }
                                 </div>

@@ -3,13 +3,16 @@ const mysql = require('mysql');
 const cors = require('cors')
 const app = express();
 const port = 3000;
-var bodyParser = require('body-parser')
+require('dotenv').config();
+
+var bodyParser = require('body-parser');
+const { default: postcss } = require('postcss');
 // Create the MySQL connection once
 const con = mysql.createConnection({
     host: 'localhost',
-    user: 'root',
-    password: 'ashish',
-    database: 'userLogin'
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
 });
 app.use(bodyParser.json())
 // Connect to the MySQL database
@@ -26,31 +29,33 @@ app.use(cors())
 app.post('/', (req, res) => {
     const { fName, Email, Password } = req.body;
 
-    const checkMail= `SELECT Email FROM DETAILS WHERE Email == ${Email}`
+    const checkMail = `SELECT Email FROM DETAILS WHERE Email = ?`;
+    const sql = "INSERT INTO details (Name, Email, Password) VALUES (?, ?, ?)";
 
-    // const sql = "INSERT INTO details (Name, Email, Password) VALUES (?, ?, ?)";
-
-    con.query(sql,  (err, result) => {
+    con.query(checkMail, [Email], (err, result) => {
         if (err) {
-                    console.error('Error executing query:', err);
-                    return res.status(500).send('Internal Server Error'); // Ensure to return here
-                }
-        if (Email== result.Email){
-        res.status(406).json({
-            "status": 409,
-            "message": "Email already exists."
-          })
+            console.error('Error executing query:', err);
+            return res.status(500).send('Internal Server Error');
         }
-        
+        if (result.length > 0) {  // Check if any rows are returned
+            res.status(409).json({
+                "status": 409,
+                "msg": "Email already exists."
+            });
+        } else {
+            con.query(sql, [fName, Email, Password], (err, result) => {
+                if (err) {
+                    console.error('Error executing query:', err);
+                    return res.status(500).send('Internal Server Error');
+                }
+                console.log("1 record inserted");
+                res.status(201).json({
+                    "status": 201,
+                    "msg": "Account create successfully!"
+                })
+            });
+        }
     });
-    // con.query(sql, [fName, Email, Password], (err, result) => {
-    //     if (err) {
-    //         console.error('Error executing query:', err);
-    //         return res.status(500).send('Internal Server Error'); // Ensure to return here
-    //     }
-    //     console.log("1 record inserted");
-    //     res.send('Data received and inserted successfully!'); // Send response only once
-    // });
 });
 
 
@@ -70,18 +75,18 @@ app.post('/sign-in', (req, res) => {
 
         if (result.length === 0) {
             // return
-             res.status(404).json({msg:'User not found',status:404});
+            res.status(404).json({ msg: 'User not found', status: 404 });
         }
 
-        if(user.Password!=Password){
+        if (user.Password != Password) {
             // return
-            res.status(404).json({msg:"Password is incorrect", status:401})
+            res.status(404).json({ msg: "Password is incorrect", status: 401 })
         }
 
-        if (user.Password==Password){
+        if (user.Password == Password) {
             // return
-            res.status(200).json({msg:"Login successfully", status:200})
-        }   
+            res.status(200).json({ msg: "Login successfully", status: 200 })
+        }
         console.log(result);
     });
 });
