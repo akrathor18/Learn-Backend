@@ -55,21 +55,22 @@ app.post('/sign-in', (req, res) => {
         const user = result[0];
 
         if (result.length === 0) {
-            res.status(404).json({msg:'User not found',code:404});
-            return;
+            return
+             res.status(404).json({msg:'User not found',code:404});
         }
 
         if(user.Password!=Password){
+            return
             res.status(404).json({msg:"Password is incorrect", code:404})
         }
 
         if (user.Password==Password){
+            return
             res.status(200).json({msg:"Login successfully", code:200})
         }   
         console.log(result);
     });
 });
-
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
