@@ -21,7 +21,7 @@ export function SignUp() {
                 body: JSON.stringify(data), // Send the data as JSON
             });
     
-            const resp = await response.text(); // Call .text() as a function
+            const resp = await response.json(); // Call .text() as a function
             console.log(data, resp);
         } catch (error) {
             console.error('Error during the fetch:', error);

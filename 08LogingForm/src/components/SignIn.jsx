@@ -1,9 +1,10 @@
-import React from 'react';
+import {React,useState} from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useForm } from "react-hook-form";
+import { useForm, useFormState } from "react-hook-form";
 
 export function SignIn() {
+    const [formResp, setFormResp] = useState()
     const {
         register,
         handleSubmit,
@@ -20,10 +21,8 @@ export function SignIn() {
                 body: JSON.stringify(data), // Send the data as JSON
             });
 
-
-
-            const resp = await response.text(); // Call .text() as a function
-            console.log(data, resp);
+            const res= await response.json()
+            setFormResp(res)
         } catch (error) {
             console.error('Error during the fetch:', error);
         }
@@ -115,7 +114,7 @@ export function SignIn() {
                                 
                                 {
                                     isSubmitSuccessful&&(
-                                        <span className={`text-green-600 font-bold`}>Login successfully</span>
+                                        <span className={`font-bold ${formResp.status==200?`text-green-500`:`text-red-500`}`}>{formResp.msg}</span>
                                     )
                                 }
                             </div>

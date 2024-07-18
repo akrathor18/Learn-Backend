@@ -26,17 +26,31 @@ app.use(cors())
 app.post('/', (req, res) => {
     const { fName, Email, Password } = req.body;
 
-    const sql = "INSERT INTO details (Name, Email, Password) VALUES (?, ?, ?)";
+    const checkMail= `SELECT Email FROM DETAILS WHERE Email == ${Email}`
 
-    con.query(sql, [fName, Email, Password], (err, result) => {
+    // const sql = "INSERT INTO details (Name, Email, Password) VALUES (?, ?, ?)";
+
+    con.query(sql,  (err, result) => {
         if (err) {
-            console.error('Error executing query:', err);
-            return res.status(500).send('Internal Server Error'); // Ensure to return here
+                    console.error('Error executing query:', err);
+                    return res.status(500).send('Internal Server Error'); // Ensure to return here
+                }
+        if (Email== result.Email){
+        res.status(406).json({
+            "status": 409,
+            "message": "Email already exists."
+          })
         }
-
-        console.log("1 record inserted");
-        res.send('Data received and inserted successfully!'); // Send response only once
+        
     });
+    // con.query(sql, [fName, Email, Password], (err, result) => {
+    //     if (err) {
+    //         console.error('Error executing query:', err);
+    //         return res.status(500).send('Internal Server Error'); // Ensure to return here
+    //     }
+    //     console.log("1 record inserted");
+    //     res.send('Data received and inserted successfully!'); // Send response only once
+    // });
 });
 
 
@@ -55,18 +69,18 @@ app.post('/sign-in', (req, res) => {
         const user = result[0];
 
         if (result.length === 0) {
-            return
-             res.status(404).json({msg:'User not found',code:404});
+            // return
+             res.status(404).json({msg:'User not found',status:404});
         }
 
         if(user.Password!=Password){
-            return
-            res.status(404).json({msg:"Password is incorrect", code:404})
+            // return
+            res.status(404).json({msg:"Password is incorrect", status:401})
         }
 
         if (user.Password==Password){
-            return
-            res.status(200).json({msg:"Login successfully", code:200})
+            // return
+            res.status(200).json({msg:"Login successfully", status:200})
         }   
         console.log(result);
     });
