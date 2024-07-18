@@ -1,4 +1,4 @@
-import {React , useState}from 'react'
+import { React, useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useForm } from "react-hook-form";
@@ -15,21 +15,19 @@ export function SignUp() {
     const onSubmit = async (data) => {
         try {
             const response = await fetch('http://localhost:3000/', {
-                method: 'POST', // Use POST method
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data), // Send the data as JSON
+                body: JSON.stringify(data),
             });
-    
-            const resp = await response.json(); // Call .text() as a function
+
+            const resp = await response.json();
             setFormResp(resp)
-            // console.log(data);
         } catch (error) {
             console.error('Error during the fetch:', error);
         }
     };
-    console.log(formResp);
 
     return (
 
@@ -48,7 +46,7 @@ export function SignUp() {
                                 Sign In
                             </Link>
                         </p>
-                        <form onSubmit={handleSubmit(onSubmit)}  className="mt-8">
+                        <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
                             <div className="space-y-5">
                                 <div>
                                     <label htmlFor="name" className="text-base font-medium text-gray-900">
@@ -81,10 +79,10 @@ export function SignUp() {
                                     </label>
                                     <div className="mt-2">
                                         <input
-                                        {...register('Email', {
-                                            required: "This field is Required *",
-                                            minLength: { value: 8, message: "Invalid Email" },
-                                        })}
+                                            {...register('Email', {
+                                                required: "This field is Required *",
+                                                minLength: { value: 8, message: "Invalid Email" },
+                                            })}
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="email"
                                             placeholder="Email"
@@ -106,11 +104,11 @@ export function SignUp() {
                                     </div>
                                     <div className="mt-2">
                                         <input
-                                         {...register('Password', {
-                                            required: "This field is Required *",
-                                            minLength: { value: 8, message: "Password must be 8 characters long" },
+                                            {...register('Password', {
+                                                required: "This field is Required *",
+                                                minLength: { value: 8, message: "Password must be 8 characters long" },
 
-                                        })}
+                                            })}
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="password"
                                             placeholder="Password"
@@ -125,18 +123,18 @@ export function SignUp() {
                                 </div>
                                 <div>
                                     <button
-                                    disabled={isSubmitting}
+                                        disabled={isSubmitting}
                                         type="submit"
                                         className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                                     >
                                         Create Account <ArrowRight className="ml-2" size={16} />
                                     </button>
-                                      
-                                {
-                                    isSubmitSuccessful&&(
-                                        <span className={`${formResp.status==409?'text-red-500':'text-green-500'} font-bold`}>{formResp.msg}</span>
-                                    )
-                                }
+
+                                    {
+                                        isSubmitSuccessful && (
+                                            <span className={`${formResp.status == 409 ? 'text-red-500' : 'text-green-500'} font-bold`}>{formResp.msg}</span>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </form>
