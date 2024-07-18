@@ -29,7 +29,7 @@ app.use(cors())
 app.post('/', (req, res) => {
     const { fName, Email, Password } = req.body;
 
-    const checkMail = `SELECT Email FROM DETAILS WHERE Email = ?`;
+    const checkMail = `SELECT Email FROM details WHERE Email = ?`;
     const sql = "INSERT INTO details (Name, Email, Password) VALUES (?, ?, ?)";
 
     con.query(checkMail, [Email], (err, result) => {
