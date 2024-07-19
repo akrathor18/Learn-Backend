@@ -6,7 +6,7 @@ const port = 3000;
 require('dotenv').config();
 
 var bodyParser = require('body-parser');
-// Create the MySQL connection once
+
 const con = mysql.createConnection({
     host: 'localhost',
     user: process.env.USER,
@@ -14,7 +14,8 @@ const con = mysql.createConnection({
     database: process.env.DATABASE
 });
 app.use(bodyParser.json())
-// Connect to the MySQL database
+
+
 con.connect(function (err) {
     if (err) {
         console.error('Error connecting to the database:', err);
@@ -36,7 +37,7 @@ app.post('/', (req, res) => {
             console.error('Error executing query:', err);
             return res.status(500).send('Internal Server Error');
         }
-        if (result.length > 0) {  // Check if any rows are returned
+        if (result.length > 0) {
             res.status(409).json({
                 "status": 409,
                 "msg": "Email already exists."
@@ -73,17 +74,14 @@ app.post('/sign-in', (req, res) => {
         const user = result[0];
 
         if (result.length === 0) {
-            // return
             res.status(404).json({ msg: 'User not found', status: 404 });
         }
 
         if (user.Password != Password) {
-            // return
             res.status(404).json({ msg: "Password is incorrect", status: 401 })
         }
 
         if (user.Password == Password) {
-            // return
             res.status(200).json({ msg: "Login successfully", status: 200 })
         }
         console.log(result);

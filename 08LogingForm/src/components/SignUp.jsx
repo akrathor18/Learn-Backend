@@ -1,6 +1,6 @@
 import { React, useState } from 'react'
 import { ArrowRight, EyeOff, Eye } from 'lucide-react'
-import { Link,useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from "react-hook-form";
 
 export function SignUp() {
@@ -27,9 +27,9 @@ export function SignUp() {
             setFormResp(resp)
             if (resp.status === 201) {
                 setTimeout(() => {
-                  navigate('/sign-in');
+                    navigate('/sign-in');
                 }, 1500);
-              }
+            }
         } catch (error) {
             console.error('Error during the fetch:', error);
         }
@@ -116,13 +116,13 @@ export function SignUp() {
 
                                             })}
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                                            type={showPass?'text':"Password"}
+                                            type={showPass ? 'text' : "Password"}
                                             placeholder="Password"
                                             id="password"
                                         />
-                                        <div  className="relative right-3 inline-block cursor-pointer"
-                                        style={{left: "40%", top:"-30px"}}
-                                        onClick={()=> setShowPass(!showPass)}
+                                        <div className="relative right-3 inline-block cursor-pointer"
+                                            style={{ left: "40%", top: "-30px" }}
+                                            onClick={() => setShowPass(!showPass)}
                                         >
                                             {showPass ? <EyeOff /> : <Eye />}
                                         </div>

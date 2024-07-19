@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import { ArrowRight, EyeOff, Eye } from 'lucide-react';
-import { Link,  } from 'react-router-dom';
+import { Link, } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 
 export function SignIn() {
