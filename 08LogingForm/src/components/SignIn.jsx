@@ -1,10 +1,11 @@
 import { React, useState } from 'react';
-import { ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useForm, useFormState } from "react-hook-form";
+import { ArrowRight, EyeOff, Eye } from 'lucide-react';
+import { Link,  } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 
 export function SignIn() {
     const [formResp, setFormResp] = useState()
+    const [showPass, setShowPass] = useState(false)
     const {
         register,
         handleSubmit,
@@ -90,10 +91,16 @@ export function SignIn() {
                                             {...register('Password', {
                                                 required: "This field is Required *",
                                             })}
-                                            className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                                            type="password"
+                                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                            type={showPass ? 'text' : "Password"}
                                             placeholder="Password"
                                         />
+                                        <div className="relative right-3 inline-block cursor-pointer"
+                                            style={{ left: "40%", top: "-30px" }}
+                                            onClick={() => setShowPass(!showPass)}
+                                        >
+                                            {showPass ? <EyeOff /> : <Eye />}
+                                        </div>
                                         {errors.Password && (
                                             <span className="text-red-500 text-sm">
                                                 {errors.Password.message}
@@ -114,6 +121,7 @@ export function SignIn() {
                                 {
                                     isSubmitSuccessful && (
                                         <span className={`font-bold ${formResp.status == 200 ? `text-green-500` : `text-red-500`}`}>{formResp.msg}</span>
+
                                     )
                                 }
                             </div>

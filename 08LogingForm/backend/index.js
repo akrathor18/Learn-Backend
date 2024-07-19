@@ -6,7 +6,6 @@ const port = 3000;
 require('dotenv').config();
 
 var bodyParser = require('body-parser');
-const { default: postcss } = require('postcss');
 // Create the MySQL connection once
 const con = mysql.createConnection({
     host: 'localhost',

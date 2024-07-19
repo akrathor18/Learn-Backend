@@ -1,11 +1,12 @@
 import { React, useState } from 'react'
-import { ArrowRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { ArrowRight, EyeOff, Eye } from 'lucide-react'
+import { Link,useNavigate } from 'react-router-dom'
 import { useForm } from "react-hook-form";
-import { data } from 'autoprefixer';
 
 export function SignUp() {
+    const navigate = useNavigate();
     const [formResp, setFormResp] = useState()
+    const [showPass, setShowPass] = useState(false)
     const {
         register,
         handleSubmit,
@@ -24,6 +25,11 @@ export function SignUp() {
 
             const resp = await response.json();
             setFormResp(resp)
+            if (resp.status === 201) {
+                setTimeout(() => {
+                  navigate('/sign-in');
+                }, 1500);
+              }
         } catch (error) {
             console.error('Error during the fetch:', error);
         }
@@ -110,10 +116,16 @@ export function SignUp() {
 
                                             })}
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                                            type="password"
+                                            type={showPass?'text':"Password"}
                                             placeholder="Password"
                                             id="password"
                                         />
+                                        <div  className="relative right-3 inline-block cursor-pointer"
+                                        style={{left: "40%", top:"-30px"}}
+                                        onClick={()=> setShowPass(!showPass)}
+                                        >
+                                            {showPass ? <EyeOff /> : <Eye />}
+                                        </div>
                                         {errors.Password && (
                                             <span className="text-red-500 text-sm">
                                                 {errors.Password.message}
