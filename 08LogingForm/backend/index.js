@@ -6,6 +6,7 @@ const port = 3000;
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
+const util = require('util');
 require('dotenv').config();
 
 var bodyParser = require('body-parser');
@@ -18,15 +19,6 @@ const con = mysql.createConnection({
 });
 app.use(bodyParser.json())
 
-// function async hashpass(){}
-const hashpass = async()=>{
-    const pass = 'ashish'
-    const pass2='ashish'
-    const hashedPassword = await bcrypt.hash(pass, saltRounds);
-    console.log(hashedPassword);
-    console.log(hashedPassword2);
-}
-// hashpass()
 
 con.connect(function (err) {
     if (err) {
@@ -36,6 +28,7 @@ con.connect(function (err) {
     console.log('Connected to the MySQL database');
 });
 
+const query = util.promisify(con.query).bind(con);
 app.use(cors())
 
 app.post('/', async (req, res) => {
@@ -75,32 +68,30 @@ app.post('/', async (req, res) => {
 
 
 
+app.post('/sign-in', async (req, res) => {
 
-app.post('/sign-in', (req, res) => {
     const { Email, Password } = req.body;
     const sql = `SELECT * FROM details WHERE Email = ?`;
 
-    con.query(sql, [Email], function (err, result) {
-        if (err) {
-            console.error('Error executing query:', err);
-            res.status(500).send('Error executing query');
-            return;
-        }
-        const user = result[0];
 
+    try {
+        const result = await query(sql, [Email]);
         if (result.length === 0) {
-            res.status(404).json({ msg: 'User not found', status: 404 });
+            return res.status(404).json({ msg: 'User not found', status: 404 });
         }
 
-        if (user.Password != Password) {
-            res.status(404).json({ msg: "Password is incorrect", status: 401 })
+        const user = result[0];
+        const match = await bcrypt.compare(Password, user.Password);
+
+        if (!match) {
+            return res.status(401).json({ msg: "Password is incorrect", status: 401 });
         }
 
-        if (user.Password == Password) {
-            res.status(200).json({ msg: "Login successfully", status: 200 })
-        }
-        console.log(result);
-    });
+        res.status(200).json({ msg: "Login successfully", status: 200 });
+    } catch (err) {
+        console.error('Error executing query:', err);
+        res.status(500).send('Error executing query');
+    }
 });
 
 app.listen(port, () => {
