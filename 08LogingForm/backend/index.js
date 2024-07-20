@@ -4,6 +4,8 @@ const cors = require('cors')
 const app = express();
 const port = 3000;
 const bcrypt = require('bcryptjs');
+const saltRounds = 10;
+
 require('dotenv').config();
 
 var bodyParser = require('body-parser');
@@ -16,6 +18,15 @@ const con = mysql.createConnection({
 });
 app.use(bodyParser.json())
 
+// function async hashpass(){}
+const hashpass = async()=>{
+    const pass = 'ashish'
+    const pass2='ashish'
+    const hashedPassword = await bcrypt.hash(pass, saltRounds);
+    console.log(hashedPassword);
+    console.log(hashedPassword2);
+}
+// hashpass()
 
 con.connect(function (err) {
     if (err) {
@@ -27,11 +38,14 @@ con.connect(function (err) {
 
 app.use(cors())
 
-app.post('/', (req, res) => {
+app.post('/', async (req, res) => {
     const { fName, Email, Password } = req.body;
+    const hashedPassword = await bcrypt.hash(Password, saltRounds);
 
     const checkMail = `SELECT Email FROM details WHERE Email = ?`;
     const sql = "INSERT INTO details (Name, Email, Password) VALUES (?, ?, ?)";
+
+
 
     con.query(checkMail, [Email], (err, result) => {
         if (err) {
@@ -44,7 +58,7 @@ app.post('/', (req, res) => {
                 "msg": "Email already exists."
             });
         } else {
-            con.query(sql, [fName, Email, Password], (err, result) => {
+            con.query(sql, [fName, Email, hashedPassword], (err, result) => {
                 if (err) {
                     console.error('Error executing query:', err);
                     return res.status(500).send('Internal Server Error');
