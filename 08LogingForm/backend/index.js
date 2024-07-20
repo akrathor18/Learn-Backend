@@ -5,7 +5,6 @@ const app = express();
 const port = 3000;
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
-
 const util = require('util');
 require('dotenv').config();
 
@@ -13,9 +12,9 @@ var bodyParser = require('body-parser');
 
 const con = mysql.createConnection({
     host: 'localhost',
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 app.use(bodyParser.json())
 
