@@ -8,13 +8,13 @@ function App() {
 
   return (
     <>
-    <BrowserRouter>
-    <Routes>
-      <Route path='/' element={<SignUp />}></Route>\
-      <Route path='/sign-in' element={<SignIn />}></Route>
-     
-    </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<SignUp />}></Route>\
+          <Route path='/sign-in' element={<SignIn />}></Route>
+
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
