@@ -121,7 +121,7 @@ export function SignUp() {
                                             id="password"
                                         />
                                         <div className="relative right-3 inline-block cursor-pointer"
-                                            style={{ left: "40%", top: "-30px" }}
+                                            style={{ left: "85%", top: "-30px" }}
                                             onClick={() => setShowPass(!showPass)}
                                         >
                                             {showPass ? <EyeOff /> : <Eye />}
