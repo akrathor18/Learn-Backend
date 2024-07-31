@@ -12,10 +12,10 @@ const postSchema = new mongoose.Schema({
     category: String,
     likes: Number,
 
-    // date: {
-    //     type: date,
-    //     default: Date.now,
-    // }
+    date: {
+        type: String,
+        default: Date.now,
+    }
 })
 
 const posts = mongoose.model('posts', postSchema);

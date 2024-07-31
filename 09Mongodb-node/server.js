@@ -13,10 +13,9 @@ app.get('/', (req, res) => {
 app.post('/posts', (req, res) => {
 
   const data= req.body;
-  console.log(data);
-  const newPost= new posts
+  const newPost= new posts(data)
   console.log(newPost);
-  res.status(201).send('Data post sucessfully')
+  res.status(201).json('Data post sucessfully')
 
 });('/', (req, res) => {
   res.send('Hello World!')
