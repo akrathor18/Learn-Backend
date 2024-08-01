@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const url= 'mongodb://127.0.0.1:27017/learndbs'
+const url= 'mongodb://127.0.0.1:27017/learnDbs'
 
 mongoose.connect(url,{
     useNewUrlParser:true,
