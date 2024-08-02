@@ -38,13 +38,31 @@ route.put("/:id", async (req, res) => {
             runValidators: true,
         })
 
-if(!updatedData){
-    res.status(404).json('ud not found ')
+if(!response){
+    res.status(404).json('Id not found ')
 
 }
         console.log(response);
 
         res.status(200).json('Data updated ')
+    } catch (error) {
+        console.log(error);
+        res.status(500).json('Internal server error')
+    }
+})
+
+route.delete('/:id', async (req, res)=>{
+    try {
+    const id = req.params.id;
+    const resp= await users.findOneAndDelete(id)
+    
+if(!resp){
+    res.status(404).json('Id not found ')
+
+}
+
+res.status(200).json('Data deleted ')
+    console.log(resp);
     } catch (error) {
         console.log(error);
         res.status(500).json('Internal server error')
