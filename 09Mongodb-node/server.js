@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 })
 app.use('/user', userRoutes)
 app.use('/posts', postRoutes)
-
+// app.use()
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
