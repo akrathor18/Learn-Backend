@@ -18,7 +18,7 @@
     app.use(logRequest)
     app.use(passport.initialize());
 
-    app.get('/', (req, res) => {
+    app.get('/',passport.Authenticator, (req, res) => {
         res.send('Hello World!');
     });
 
@@ -34,6 +34,29 @@
             console.log(error)
         }
     })
+
+    passport.use(new localStrategy(
+        async (username, password, done) => {   
+
+            try {
+                console.log('Received credentails', username, password)
+                const user = await user.findOne({ name: username })
+                if(!user){
+                    return done(null, false, { message: 'User not found.' })
+                }
+                const isMatch = await user.comparePassword(password)
+                if(!isMatch){
+                    return done(null, false, { message: 'Incorrect password.' })
+                }
+                return done(null, user)
+
+            } catch (error) {
+                console.log("An error occure", error);
+                return done(error)
+            }
+
+        }
+    ))
 
     app.listen(port, () => {
         console.log(`Server is running at http://localhost:${port}`);
