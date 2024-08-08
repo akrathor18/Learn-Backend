@@ -5,11 +5,11 @@
     const app = express();
 
     const db = require('./database')
-    const user = require('./module/userShema')
+    const User = require('./module/userSchema')
     const port = 3000;
 
     const logRequest = (req, res, next) => {
-        console.log(`${new Date().toLocaleString()}request log `)
+        console.log(`${new Date().toLocaleString()}  request log `)
         next();
     };
 
@@ -18,14 +18,14 @@
     app.use(logRequest)
     app.use(passport.initialize());
 
-    app.get('/',passport.Authenticator, (req, res) => {
+    app.get('/',passport.authenticate('local', {session:false}), (req, res) => {
         res.send('Hello World!');
     });
 
     app.post('/post', async (req, res) => {
         try {
             const data = req.body;
-            const Newuser = new user(data)
+            const Newuser = new User(data)
             const resp = await Newuser.save()
             console.log(Newuser);
             res.status(201).json( resp)
@@ -40,12 +40,11 @@
 
             try {
                 console.log('Received credentails', username, password)
-                const user = await user.findOne({ name: username })
+                const user = await User.findOne({ name: username })
                 if(!user){
                     return done(null, false, { message: 'User not found.' })
                 }
-                const isMatch = await user.comparePassword(password)
-                if(!isMatch){
+                if( await user.password!=password){
                     return done(null, false, { message: 'Incorrect password.' })
                 }
                 return done(null, user)
