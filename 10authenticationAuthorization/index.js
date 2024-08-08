@@ -16,7 +16,8 @@
     app.use(logRequest)
     app.use(passport.initialize());
 
-    app.get('/',passport.authenticate('local', {session:false}), (req, res) => {
+    const localauth= passport.authenticate('local', {session:false})
+    app.get('/',localauth, (req, res) => {
         res.send('Hello World!');
     });
 

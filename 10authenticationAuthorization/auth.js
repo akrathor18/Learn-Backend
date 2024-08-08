@@ -12,9 +12,12 @@ passport.use(new localStrategy(
             if (!user) {
                 return done(null, false, { message: 'User not found.' })
             }
-            if (await user.password != password) {
+            const isMatchPass =user.comparePassword(password)
+            if (isMatchPass) {
                 return done(null, false, { message: 'Incorrect password.' })
             }
+
+
             return done(null, user)
 
         } catch (error) {
