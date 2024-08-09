@@ -13,7 +13,7 @@ passport.use(new localStrategy(
                 return done(null, false, { message: 'User not found.' })
             }
             const isMatchPass =user.comparePassword(password)
-            if (isMatchPass) {
+            if (!isMatchPass) {
                 return done(null, false, { message: 'Incorrect password.' })
             }
 
