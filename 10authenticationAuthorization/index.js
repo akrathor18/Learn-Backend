@@ -1,11 +1,12 @@
     const bodyParser = require('body-parser');
     const express = require('express');
     const app = express();
-
     const db = require('./database')
     const port = 3000;
     const User = require('./module/userSchema')
     const passport = require('./auth')
+    const {jwAuthMiddleware,generateTokan }= require('./jwt')
+    require('dotenv').config()
     const logRequest = (req, res, next) => {
         console.log(`${new Date().toLocaleString()}  request log `)
         next();
@@ -26,6 +27,8 @@
             const data = req.body;
             const Newuser = new User(data)
             const resp = await Newuser.save()
+            const tokan= generateTokan(resp.email,resp.name)
+            console.log('JWT tokan is:', tokan)
             console.log(Newuser);
             res.status(201).json( resp)
         } catch (error) {
