@@ -17,11 +17,11 @@
     app.use(passport.initialize());
 
     const localauth= passport.authenticate('local', {session:false})
-    app.get('/',localauth, (req, res) => {
+    app.get('/login',localauth, (req, res) => {
         res.send('Hello World!');
     });
 
-    app.post('/post', async (req, res) => {
+    app.post('/singup', async (req, res) => {
         try {
             const data = req.body;
             const Newuser = new User(data)
