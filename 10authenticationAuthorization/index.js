@@ -20,11 +20,44 @@ app.use(logRequest)
 app.use(passport.initialize());
 
 const localauth = passport.authenticate('local', { session: false })
-app.get('/login', localauth, async (req, res) => {
-    res.send('Hello World!');
-    const {username, password }= req.body
 
-    const user= await User.findOne(user)
+app.get('/users', jwAuthMiddleware, async (req, res) => {
+    try {
+        const users = await User.find({})
+        res.json(users)
+    } catch (error) {
+        console.error('Get users error:', error); // More detailed error logging
+        res.status(500).json('Internal server error');
+    }
+});
+app.post('/login', localauth, async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        if (!username || !password) {
+            return res.status(400).json('Username and password are required');
+        }
+
+        const user = await User.findOne({ name: username });
+
+        if (!user) {
+            return res.status(401).json('Invalid username ');
+        }
+        if (!(await user.comparePassword(password))) {
+            return res.status(401).json('Invalid password');
+        }
+
+        const payload = {
+            id: user._id,
+            email: user.email,
+            username: user.username
+        };
+
+        const token = generateTokan(payload);
+        res.json({ token });
+    } catch (error) {
+        console.error('Login error:', error); // More detailed error logging
+        res.status(500).json('Internal server error');
+    }
 });
 
 app.post('/singup', async (req, res) => {
@@ -32,7 +65,7 @@ app.post('/singup', async (req, res) => {
         const data = req.body;
         const Newuser = new User(data)
         const resp = await Newuser.save()
-        
+
         const Playlode = {
             id: resp._id,
             email: resp.email,
@@ -47,8 +80,6 @@ app.post('/singup', async (req, res) => {
         console.log(error)
     }
 })
-
-
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);

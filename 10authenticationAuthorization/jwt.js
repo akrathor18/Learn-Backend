@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const jwAuthMiddleware = (req, res, next) => {
-    const token = req.headers.authorization.spilt(' ')[1];
+    const authorization = req.headers.authorization
+    if (!authorization) return res.status(401).send('Access Denied: Invalid token format')
+    const token = req.headers.authorization.split(' ')[1];   
     if (!token) return res.status(401).send('Access Denied: No token provided')
 
     try {
