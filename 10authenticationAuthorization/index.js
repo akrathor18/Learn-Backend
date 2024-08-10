@@ -6,6 +6,8 @@ const port = 3000;
 const User = require('./module/userSchema')
 const passport = require('./auth')
 const { jwAuthMiddleware, generateTokan } = require('./jwt')
+
+
 require('dotenv').config()
 const logRequest = (req, res, next) => {
     console.log(`${new Date().toLocaleString()}  request log `)
@@ -18,8 +20,11 @@ app.use(logRequest)
 app.use(passport.initialize());
 
 const localauth = passport.authenticate('local', { session: false })
-app.get('/login', localauth, (req, res) => {
+app.get('/login', localauth, async (req, res) => {
     res.send('Hello World!');
+    const {username, password }= req.body
+
+    const user= await User.findOne(user)
 });
 
 app.post('/singup', async (req, res) => {
