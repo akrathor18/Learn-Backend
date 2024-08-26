@@ -8,11 +8,18 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 // Socket.io
+// io.on("connection", (socket) => {
+//   socket.on("user-message", (message) => {
+//     io.emit("message", message);
+//   });
+// });
 io.on("connection", (socket) => {
-  socket.on("user-message", (message) => {
-    io.emit("message", message);
+    socket.on("user-message", (message) => {
+      console.log("Message received:", message); // Add this line
+      io.emit("message", message);
+    });
   });
-});
+  
 
 app.use(express.static(path.resolve("./public")));
 
@@ -20,4 +27,4 @@ app.get("/", (req, res) => {
   res.sendFile(path.resolve("./public/index.html"));
 });
 
-server.listen(3000, () => console.log(`Server Started at PORT:9000`));
+server.listen(3000, () => console.log(`Server Started at PORT:3000`));

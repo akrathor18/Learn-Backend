@@ -7,5 +7,45 @@
 </head>
 <body>
     <h1>hello ashish</h1>
+    <input id="msg" type="text">
+    <button onclick="sendMsg">Send</button>
+    <div id="messages"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+     function sendMsg() {
+        console.log('clicked')
+        const socket = io('http://localhost:3000');
+        
+        document.querySelector('button').addEventListener('click', () => {
+            const input = document.getElementById('msg').value;
+            socket.emit('chat message', input);
+        });
+        
+        socket.on('chat message', (msg) => {
+            const messages = document.querySelector('#messages');
+            const p = document.createElement('p');
+            p.textContent = msg;
+            messages.appendChild(p);
+        });
+        
+        socket.on('disconnect', () => {
+            console.log('user disconnected');
+        });
+        
+        socket.on('connect', () => {
+            console.log('user connected');
+        });
+
+
+        socket.on('ping', () => {
+            console.log('ping received');
+        });
+
+        socket.on('pong', (latency) => {
+            console.log(`pong received. Latency: ${latency}ms`);
+        });
+     }
+        
+    </script>
 </body>
 </html>
