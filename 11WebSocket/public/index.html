@@ -3,49 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>web socket</title>
+    <title>WebSocket</title>
+    <style>
+        body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+        #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+        #input:focus { outline: none; }
+        #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+        #messages { list-style-type: none; margin: 0; padding: 0; }
+        #messages > li { padding: 0.5rem 1rem; }
+        #messages > li:nth-child(odd) { background: #efefef; }
+    </style>
 </head>
 <body>
-    <h1>hello ashish</h1>
+    <h1>Hello Ashish H</h1>
     <input id="msg" type="text">
-    <button onclick="sendMsg">Send</button>
+    <button onclick="sendMsg()">Send</button>
     <div id="messages"></div>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
     <script>
-     function sendMsg() {
-        console.log('clicked')
+        console.log('JavaScript loaded');
+        
+        // Establish the socket connection once
         const socket = io('http://localhost:3000');
         
-        document.querySelector('button').addEventListener('click', () => {
-            const input = document.getElementById('msg').value;
-            socket.emit('chat message', input);
+        socket.on('connect', () => {
+            console.log('User connected');
         });
-        
+
+        socket.on('disconnect', () => {
+            console.log('User disconnected');
+        });
+
+        // Listen for 'chat message' event from server
         socket.on('chat message', (msg) => {
+            console.log('Message received:', msg);  // Debugging log
             const messages = document.querySelector('#messages');
             const p = document.createElement('p');
             p.textContent = msg;
             messages.appendChild(p);
         });
-        
-        socket.on('disconnect', () => {
-            console.log('user disconnected');
-        });
-        
-        socket.on('connect', () => {
-            console.log('user connected');
-        });
 
-
-        socket.on('ping', () => {
-            console.log('ping received');
-        });
-
-        socket.on('pong', (latency) => {
-            console.log(`pong received. Latency: ${latency}ms`);
-        });
-     }
-        
+        // Function to send a message
+        function sendMsg() {
+            const input = document.getElementById('msg').value;
+            console.log('Sending message:', input);  // Debugging log
+            socket.emit('chat message', input);
+            document.getElementById('msg').value = ''; // Clear the input field after sending the message
+        }
     </script>
 </body>
 </html>
