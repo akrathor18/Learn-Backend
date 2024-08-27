@@ -10,15 +10,15 @@ const io = new Server(server);
 
 io.on("connection", (socket) => {
     console.log("A user connected");
-
+    console.log("A user connected with ID:", socket.id);
     socket.on("chat message", (message) => {
-        console.log("Message received:", message);
-        io.emit("chat message", message); // Broadcasts the message to all connected clients
-    });
+      console.log(`Message from ${socket.id}:`, message);
+      io.emit("chat message", `${socket.id}: ${message}`);
+  });
 
-    socket.on("disconnect", () => {
-        console.log("User disconnected");
-    });
+  socket.on("disconnect", () => {
+      console.log(`User with ID ${socket.id} disconnected`);
+  });
 });
 
 app.use(express.static(path.resolve("./public")));
