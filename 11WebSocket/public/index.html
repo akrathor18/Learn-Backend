@@ -1,109 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebSocket</title>
-    <style>
-        body {
-            margin: 0;
-            padding-bottom: 3rem;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        #form {
-            background: rgba(0, 0, 0, 0.15);
-            padding: 0.25rem;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            display: flex;
-            height: 3rem;
-            box-sizing: border-box;
-            backdrop-filter: blur(10px);
-        }
-
-        #msg {
-            border: none;
-            padding: 0 1rem;
-            flex-grow: 1;
-            border-radius: 2rem;
-            margin: 0.25rem;
-        }
-
-        #msg:focus {
-            outline: none;
-        }
-
-        #form>button {
-            background: #333;
-            border: none;
-            padding: 0 1rem;
-            margin: 0.25rem;
-            border-radius: 3px;
-            outline: none;
-            color: #fff;
-        }
-
-        #messages {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        #messages>li {
-            padding: 0.5rem 1rem;
-        }
-
-        #messages>li:nth-child(odd) {
-            background: #efefef;
-        }
-    </style>
+    <title>WebSocket Chat</title>
 </head>
-
 <body>
-    <h1>Hello Ashish </h1>
-    <!-- <input id="msg" type="text"> -->
-    <div id="messages"></div>
-    <ul id="messages"></ul>
-    <div id="form" >
-        <input id="msg" autocomplete="off" />
+    <h1>WebSocket Chat</h1>
+    <input type="text" id="messageInput" placeholder="Type a message...">
     <button onclick="sendMsg()">Send</button>
-    </div>
+    <div id="messages"></div>
+    <div id="typingNotification"></div> <!-- Typing notification area -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
     <script>
-        console.log('JavaScript loaded');
-
-        // Establish the socket connection once
         const socket = io('http://localhost:3000');
 
-        socket.on('connect', () => {
-            console.log('User connected');
-        });
+        function sendMsg() {
+            const input = document.querySelector('#messageInput').value;
+            socket.emit('user-message', input);
+            document.querySelector('#messageInput').value = ''; // Clear input after sending
+        }
 
-        socket.on('disconnect', () => {
-            console.log('User disconnected');
-        });
-
-        // Listen for 'chat message' event from server
-        socket.on('chat message', (msg) => {
-            console.log('Message received:', msg);  // Debugging log
+        socket.on('message', (msg) => {
             const messages = document.querySelector('#messages');
             const p = document.createElement('p');
             p.textContent = msg;
             messages.appendChild(p);
         });
 
-        // Function to send a message
-        function sendMsg() {
-            const input = document.getElementById('msg').value;
-            console.log('Sending message:', input);  // Debugging log
-            socket.emit('chat message', input);
-            document.getElementById('msg').value = ''; // Clear the input field after sending the message
-        }
+        // Typing notification
+        const inputField = document.querySelector('#messageInput');
+        inputField.addEventListener('input', () => {
+            socket.emit('user-typing', true);
+        });
+
+        socket.on('notifyTyping', (data) => {
+            const typingNotification = document.querySelector('#typingNotification');
+            if (data.isTyping) {
+                typingNotification.textContent = `${data.user} is typing...`;
+            } else {
+                typingNotification.textContent = '';
+            }
+        });
+
+        inputField.addEventListener('blur', () => {
+            socket.emit('user-typing', false); // Send "not typing" when input loses focus
+        });
     </script>
 </body>
-
 </html>

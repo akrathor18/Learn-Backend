@@ -19,7 +19,26 @@ io.on("connection", (socket) => {
     console.log(`User with ID ${socket.id} disconnected`);
   });
 });
+io.on("connection", (socket) => {
+  socket.on("user-message", (message) => {
+    io.emit("message", message);
+  });
 
+  socket.on("user-typing", (typingStatus) => {
+    console.log(`User is typing: ${typingStatus}`);
+    // You could broadcast this status to other clients if needed
+  });
+});
+
+io.on("connection", (socket) => {
+  socket.on("user-message", (message) => {
+    io.emit("message", message);
+  });
+
+  socket.on("user-typing", (isTyping) => {
+    socket.broadcast.emit("notifyTyping", { user: socket.id, isTyping: isTyping });
+  });
+});
 app.use(express.static(path.resolve("./public")));
 
 app.get("/", (req, res) => {
