@@ -39,6 +39,43 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("notifyTyping", { user: socket.id, isTyping: isTyping });
   });
 });
+
+
+let users = {}; // Object to store users and their socket IDs
+
+io.on("connection", (socket) => {
+    console.log(`User connected: ${socket.id}`);
+
+    // When a user logs in or connects, save their ID with their username
+    socket.on('register', (username) => {
+        users[username] = socket.id;
+        console.log(`User registered: ${username} with ID: ${socket.id}`);
+    });
+
+    // Sending a message to a specific user
+    socket.on('private-message', ({ recipient, message }) => {
+        const recipientSocketId = users[recipient];
+        if (recipientSocketId) {
+            io.to(recipientSocketId).emit('private-message', { sender: socket.id, message: message });
+        } else {
+            console.log(`User ${recipient} not found`);
+        }
+    });
+
+    // Handle user disconnect
+    socket.on('disconnect', () => {
+        // Remove the user from the list when they disconnect
+        for (let username in users) {
+            if (users[username] === socket.id) {
+                delete users[username];
+                console.log(`User disconnected: ${username}`);
+                break;
+            }
+        }
+    });
+});
+
+
 app.use(express.static(path.resolve("./public")));
 
 app.get("/", (req, res) => {
