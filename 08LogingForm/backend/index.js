@@ -47,7 +47,7 @@ app.post('/', async (req, res) => {
         if (result.length > 0) {
             res.status(409).json({
                 "status": 409,
-                "msg": "Email already exists with this email."
+                "msg": "User already exists with this email."
             });
         } else {
             con.query(sql, [fName, Email, hashedPassword], (err, result) => {
